@@ -26,12 +26,51 @@ function drawer(price, cash, cid) {
 
   // Run checkDrawerCash then check to see if we have enough $$ to make change or need to close register.
   if(totalDrawerCash < change){
-        return("Insufficient Funds");
+        return "Insufficient Funds";
       }else if(totalDrawerCash == change){
-        return("Closed");
+        return "Closed";
       }
-
   // console.log(totalDrawerCash);
+
+
+
+
+
+
+
+  function getValue(currency) {
+        switch (currency) {
+            case 'PENNY':
+                return 1;
+                break;
+            case 'NICKEL':
+                return 5;
+                break;
+            case 'DIME':
+                return 10;
+                break;
+            case 'QUARTER':
+                return 25;
+                break;
+            case 'ONE':
+                return 100;
+                break;
+            case 'FIVE':
+                return 500;
+                break;
+            case 'TEN':
+                return 1000;
+                break;
+            case 'TWENTY':
+                return 2000;
+                break;
+            case 'ONE HUNDRED':
+                return 10000;
+        }
+    }
+
+
+
 
   // Here is your change, ma'am.
   return drawerStart[3];
