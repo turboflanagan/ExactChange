@@ -10,7 +10,7 @@ function drawer(price, cash, cid) {
   var drawer = cid;
   console.log(drawerStart);
   // Here is your change, ma'am.
-  change = cash - price;
+  change = parseFloat(cash - price);
   // for(i = 8; i >= 0; i--){
     // while currencyValue[i] >= drawerStart [i][0]{
       
