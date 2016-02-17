@@ -25,7 +25,7 @@ function drawer(price, cash, cid) {
     // Run checkDrawerCash then check to see if we have enough $$ to make change or need to close register.
     if(totalCashInDrawer < change){
         return "Insufficient Funds";
-    }else if(totalDrawerCash == change){
+    }else if(totalCashInDrawer == change){
         return "Closed";
     }
     // console.log(totalDrawerCash);
