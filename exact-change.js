@@ -1,63 +1,60 @@
 function drawer(price, cash, cid) {
-  //parseFloat() is not returning decimals properly. Converting to factor of 100.
+  //parseFloat() does not return decimals properly. Convert to a factor of 100.
   // Convert back by dividing by 100 before returning values.
-    price = price * 100;
-    cash = cash * 100;
+    var priceWithoutDecimal = price * 100;
+    var cashWithoutDecimal = cash * 100;
 
-    var change = cash - price;
-    var changeLeftToCount = change;  // Sets a var that we will reduce as we count out change, but does not alter the value of the var change.
+    var changeOwed = cashWithoutDecimal - priceWithoutDecimal;
+    var changeLeftToCount = changeOwed;
     var customersChange = [];
     var totalDrawerCash = 0;
     var totalCashInDrawer = checkDrawerCash(cid);
+    var startingCashInDrawer = cid;
 
-    function checkDrawerCash(cid) {
-        for (i=0; i<cid.length; i++){
+    function checkDrawerCash(startingCashInDrawer) {
             var drawerTotal = 0;
-            drawerTotal += cid[i][1] * 100; 
-            // adds the amount of each demon and adds to drawerTotal 
-            // on each iteration through the loop.  * 100 is to add 2 decimal places to each value to use whole numbers
+        for (i=0; i<startingCashInDrawer.length; i++){
+            drawerTotal += startingCashInDrawer[i][1] * 100; 
+            // adds the amount of each demon and adds to drawerTotal on each iteration through the loop.
+            // * 100 is to add 2 decimal places to each value to use whole numbers
             // until we are ready to convert them back to dollars and cents.
         }
-        console.log(drawerTotal);
-        return drawerTotal; // Returns the sum total dollars and cents of the drawer.
+            return drawerTotal; 
     }
 
     // Run checkDrawerCash then check to see if we have enough $$ to make change or need to close register.
-    if(totalCashInDrawer < change){
+    if(totalCashInDrawer < changeOwed){
         return "Insufficient Funds";
-    }else if(totalCashInDrawer == change){
+    }else if(totalCashInDrawer == changeOwed){
         return "Closed";
     }
-    // console.log(totalDrawerCash);
 
-    for (i = cid.length - 1; i >= 0; i--) { // Loop through the cid array starting with the highest denom and move to smallest.
-                                              // This allows me to get the highest value change first and work down to pennies.
-        var currencyName = cid[i][0];  //Index 0 is the name of the currency of the current array. Starting at "ONE HUNDRED".
-        var currencyTotal = cid[i][1] * 100;  //Multiply by 100 to remove decimal on cents.
-        var currencyValue = getValue(currencyName);  // This plugs currencyName into the getValue function to return the value of that currency.
-        var currencyAmount = currencyTotal / currencyValue;  // How many of each denomination we have.
-        var toReturn = 0;       
+    for (i = startingCashInDrawer.length - 1; i >= 0; i--) { // Start at highest denom and move to smallest.
+        var currencyName = startingCashInDrawer[i][0];  //Index 0 is the name of the currency of the current array. Starting at "ONE HUNDRED".
+        var currencyTotal = startingCashInDrawer[i][1] * 100;  //Multiply by 100 to remove decimal on cents.
+        var currencyValue = getValue(currencyName);  
+        var quantityOfDenom = currencyTotal / currencyValue;  
+        var quantityOfDenomToReturn = 0;       
 
-        while (changeLeftToCount >= currencyValue && currencyAmount > 0) { //Keep going while changeLeftToCount is higher than the value of 
-                                                                        //the currency we are on. 
-            changeLeftToCount -= currencyValue;            // Reduce the changeLeftToCount by the currencyValue each time through.
-            currencyAmount--;                              // Reduce the number of these items because we just removed one to give the customer.
-            toReturn++;                                    // How many of these items we are returning to the customer.
+        while (changeLeftToCount >= currencyValue && quantityOfDenom > 0) { 
+            changeLeftToCount -= currencyValue;
+            quantityOfDenom--;                              
+            quantityOfDenomToReturn++;
         }
 
       
-        if (toReturn > 0) { // If there are items of this currency to return, push them to the result array.
-            customersChange.push([currencyName, toReturn * (currencyValue / 100)]); // Divide the currencyValue by 100 to set it back to the 
+        if (quantityOfDenomToReturn > 0) { 
+            customersChange.push([currencyName, quantityOfDenomToReturn * (currencyValue / 100)]); // Divide the currencyValue by 100 to set it back to the 
             //proper decimal value.  Multiply this by the number of this currency we are returning to the customer.
         }
     }
 
-    if (checkDrawerCash(customersChange) != change) {
+    if (checkDrawerCash(customersChange) != changeOwed) {
         return 'Insufficient Funds';            
     }
-     
-    return customersChange;
 
+    return customersChange;
+     
     function getValue(currency) {
         switch (currency) {
             case 'PENNY':
@@ -79,9 +76,16 @@ function drawer(price, cash, cid) {
             case 'ONE HUNDRED':
                 return 10000;
         }
-
-    return customersChange;  // The drawer had enough change and all went well.  We return the customer's change.
-
     }
 }
+
+
+
+//drawer(19.50, 20.00, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.10], ["QUARTER", 4.25], ["ONE", 90.00], ["FIVE", 55.00], ["TEN", 20.00], ["TWENTY", 60.00], ["ONE HUNDRED", 100.00]]);
+
+
+
+
+
+
 
